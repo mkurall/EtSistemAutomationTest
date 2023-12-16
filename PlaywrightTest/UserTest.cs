@@ -36,7 +36,7 @@ namespace PlaywrightTest
         [Test]
         public async Task Test001_UserFailLogin()
         {
-            await Page.GotoAsync("https://kurall.com");
+            await Page.GotoAsync("http://localhost:3917/");
             var btnLogin = Page.Locator("xpath=/html/body/section/div/div/div/div/div/div[2]/div/form/div[4]/button");
 
            

@@ -14,7 +14,9 @@ namespace EtSistemTest
         [OneTimeSetUp]
         public void Setup()
         {
-            Driver = new ChromeDriver(@"C:\chromedriver_win32");
+
+            Driver = new ChromeDriver();
+ 
 
             Console.WriteLine("Test started...");
         }
@@ -22,17 +24,17 @@ namespace EtSistemTest
         [Test]
         public void Test001_UserFailLogin()
         {
-            Driver.Navigate().GoToUrl("https://kurall.com");
+            Driver.Navigate().GoToUrl("http://localhost:3917/");
 
             var txtUserName = Driver.FindElement(By.Id("username"));
             var txtPassword = Driver.FindElement(By.Id("password"));
-            var btnLogin = Driver.FindElement(By.XPath("/html/body/section/div/div/div/div/div/div[2]/div/form/div[4]/button"));
+            var btnLogin = Driver.FindElement(By.XPath("/html/body/div[2]/div/div/div[1]/form/div[4]/button"));
 
             txtUserName.SendKeys("mustafakural@outlook.com");
             txtPassword.SendKeys("3535");
             btnLogin.Submit();
 
-            var lblInvalidUserOrPassword = Driver.FindElement(By.XPath("/html/body/section/div/div/div/div/div/div[2]/div/div/div/ul/li"));
+            var lblInvalidUserOrPassword = Driver.FindElement(By.XPath("/html/body/div[2]/div/div/div[1]/div/div/ul/li"));
 
             Assert.That(lblInvalidUserOrPassword.Displayed, Is.True, "Hatalý kullanýcý yada parola mesajý görünmeli");
 
@@ -42,17 +44,17 @@ namespace EtSistemTest
         [Test]
         public void Test002_UserSuccessLogin()
         {
-            Driver.Navigate().GoToUrl("https://kurall.com");
+            Driver.Navigate().GoToUrl("http://localhost:3917/");
 
             var txtUserName = Driver.FindElement(By.Id("username"));
             var txtPassword = Driver.FindElement(By.Id("password"));
-            var btnLogin = Driver.FindElement(By.XPath("/html/body/section/div/div/div/div/div/div[2]/div/form/div[4]/button"));
+            var btnLogin = Driver.FindElement(By.XPath("/html/body/div[2]/div/div/div[1]/form/div[4]/button"));
 
             txtUserName.SendKeys("mustafakural@outlook.com");
             txtPassword.SendKeys("1234");
             btnLogin.Submit();
             
-            var lnkReadBarcode = Driver.FindElement(By.XPath("//*[@id='content']/div[1]/div/a"));
+            var lnkReadBarcode = Driver.FindElement(By.XPath("//*[@id=\"navbarDropdown2\"]"));
 
             Assert.That(lnkReadBarcode.Displayed, Is.True, "Giriþ yapýldýysa barkod okuma butonu görünmeli");
 
@@ -62,7 +64,7 @@ namespace EtSistemTest
         [Test]
         public void Test003_UserMustNotAccessUserList()
         {
-            Driver.Navigate().GoToUrl("https://kurall.com/User/List");
+            Driver.Navigate().GoToUrl("http://localhost:3917/User/List");
 
             Assert.IsTrue(!Driver.Url.EndsWith("/User/List"),"Kullanýcý, kullanýcýlar sayfasýna eriþemez");
 
@@ -72,10 +74,19 @@ namespace EtSistemTest
         [Test]
         public void Test004_UserLogout()
         {
-            Driver.Navigate().GoToUrl("https://kurall.com/User/");
-            
-            var lnkUser = Driver.FindElement(By.XPath("/html/body/header/nav/div/div/ul[2]/li/a"));
-            var lnkUserLogout = Driver.FindElement(By.XPath("/html/body/header/nav/div/div/ul[2]/li/ul/li[3]/a"));
+            Driver.Navigate().GoToUrl("http://localhost:3917/");
+
+
+            var txtUserName = Driver.FindElement(By.Id("username"));
+            var txtPassword = Driver.FindElement(By.Id("password"));
+            var btnLogin = Driver.FindElement(By.XPath("/html/body/div[2]/div/div/div[1]/form/div[4]/button"));
+
+            txtUserName.SendKeys("mustafakural@outlook.com");
+            txtPassword.SendKeys("1234");
+            btnLogin.Submit();
+
+            var lnkUser = Driver.FindElement(By.XPath("//*[@id=\"navbarDropdown2\"]"));
+            var lnkUserLogout = Driver.FindElement(By.XPath("//*[@id=\"navbarCollapse\"]/ul[2]/li/ul/li[3]/a"));
 
             Assert.That(lnkUser.Displayed, Is.True, "Kullanýcý menüsü görünmeli");
 
@@ -83,7 +94,7 @@ namespace EtSistemTest
 
             lnkUserLogout.Click();
 
-            var btnLogin = Driver.FindElement(By.XPath("/html/body/section/div/div/div/div/div/div[2]/div/form/div[4]/button"));
+            btnLogin = Driver.FindElement(By.XPath("/html/body/div[2]/div/div/div[1]/form/div[4]/button"));
 
             Assert.That(btnLogin.Displayed, Is.True, "Giriþ sayfasý gelmeli");
 
